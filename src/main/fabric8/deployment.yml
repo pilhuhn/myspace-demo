@@ -2,23 +2,35 @@ spec:
   template:
     spec:
       containers:
-        - livenessProbe:
-            failureThreshold: 2
-            httpGet:
-              path: "/health"
-              port: 8080
-              scheme: HTTP
-            initialDelaySeconds: 60
-            periodSeconds: 3
-            successThreashold: 1
-            timeoutSeconds: 1
-          readinessProbe:
-            failureThreshold: 3
-            httpGet:
-              path: "/health"
-              port: 8080
-              scheme: HTTP
-            initialDelaySeconds: 10
-            periodSeconds: 10
-            successThreashold: 1
-            timeoutSeconds: 1
+      - livenessProbe:
+          failureThreshold: 2
+          httpGet:
+            path: /health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 60
+          periodSeconds: 3
+          successThreashold: 1
+          timeoutSeconds: 1
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreashold: 1
+          timeoutSeconds: 1
+      - env:
+        - name: JAEGER_AGENT_HOST
+          value: localhost
+        - name: JAEGER_AGENT_PORT
+          value: 6831
+        - name: JAEGER_SERVICE_NAME
+          value: XXX-TODO
+        - name: JAEGER_HTTP_QUERY_URL
+          value: http://jaeger-agent-EDIT_ME.starter-us-east-2.openshiftapps.com/api/traces
+      - resources:
+          limits:
+            memory: 250Mi
